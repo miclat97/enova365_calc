@@ -4,11 +4,6 @@
       "commandName": "Executable",
       "executablePath": "C:\\Program Files (x86)\\Soneta\\enova365 2306.1.5.0\\SonetaExplorer.exe",
       "commandLineArgs": "/nodbextensions"
-    },
-    "Profile 1": {
-      "commandName": "Executable",
-      "executablePath": "C:\\Program Files (x86)\\Soneta\\enova365 2306.1.5.0\\SonetaExplorer.exe",
-      "commandLineArgs": "/nodbextensions"
     }
   }
 }
