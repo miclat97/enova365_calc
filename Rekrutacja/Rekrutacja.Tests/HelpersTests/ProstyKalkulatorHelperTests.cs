@@ -14,6 +14,7 @@ namespace Rekrutacja.Tests.Helpers
         [TestCase(5, 2, '-', 3)] // 5 - 2 = 3
         [TestCase(4, 3, '*', 12)] // 4 * 3 = 12
         [TestCase(10, 2, '/', 5)] // 10 / 2 = 5
+        [TestCase(10, 3, '/', 3)] // 10 / 3 = 3,3333..., wynik zaokrąglony do 3, ponieważ jest to najbliższa liczba całkowita
         public void WykonajOperacje_ValidOperations_ReturnsExpectedResult(int a, int b, char operacja, int expected)
         {
             var result = ProstyKalkulatorStaticHelper.WykonajOperacje(a, b, operacja);

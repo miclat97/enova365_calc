@@ -22,11 +22,11 @@ namespace Rekrutacja.Helpers.PoleFiguryHelper
                 case FiguraEnum.Prostokat:
                     return (int)a * b;
                 case FiguraEnum.Trojkat:
-                    wynikPrzedZaokragleniem = (a * b) / 2;
+                    wynikPrzedZaokragleniem = (double)((a * b) / 2);
                     return (int)Math.Round(wynikPrzedZaokragleniem); // a jest podstawą trójkąta, b to wysokość trójkąta; wzór na pole trójkąta to (podstawa * wysokość) / 2
                 case FiguraEnum.Kolo:
-                    wynikPrzedZaokragleniem = Math.PI * Math.Pow(a, 2); //a jest promieniem koła, więc pole koła to π * r^2
-                    return (int)Math.Round(wynikPrzedZaokragleniem);
+                    wynikPrzedZaokragleniem = (double)(Math.PI * Math.Pow(a, 2)); //a jest promieniem koła, więc pole koła to π * r^2
+                    return (int)Math.Round(wynikPrzedZaokragleniem); // zaokrąglenie jak przy dzieleniu w metodzie prostego kalkulatora - w systemie ERP wartość po przecinku może być szczególnie istotna (np. do obliczania jakichś podatków), dlatego żeby spełnić wymagania zadania (zwracany typ INT) ale jednocześie chcąc uzyskąć jak najdokadniejszy wynik zaokrąglam go przed rzutowaniem
                 default:
                     throw new InvalidOperationException($"Nieprawidłowa figura!");
             }

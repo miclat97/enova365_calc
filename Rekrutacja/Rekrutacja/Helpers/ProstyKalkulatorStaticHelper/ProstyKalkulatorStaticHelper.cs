@@ -32,7 +32,9 @@ namespace Rekrutacja.Helpers.ProstyKalkulatorStaticHelper
                 case '/':
                     if (b == 0)
                         throw new DivideByZeroException("Nie można dzielić przez zero.");
-                    return (int) a / b; // Rzutowanie na int, aby wynik był typu int, ponieważ w przypadku dzielenia może być to liczba zmiennoprzecinkowa; TODO: Sprwdzić w jaki sposób obsługiwać liczby zmiennoprzecinkowe w Enova 365
+                    return (int)Math.Round((double)(a / b)); // Z powodu identycznego jak w przypadku obliczania pola figury, zaokrąglamy wynik dzielenia
+                                                             // do najbliższej liczby całkowitej, ponieważ zakładam że w prograie ERP precyzja
+                                                             // jest kluczowa i nie możemy sobie pozwolić na ucięcie wartości po przecinku
                 default:
                     throw new InvalidOperationException($"Nieprawidłowa operacja: {operacja} Dozwolone są: + - * /");
             }
