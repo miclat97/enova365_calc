@@ -1,14 +1,17 @@
-﻿using Soneta.Business;
+﻿using Rekrutacja.Enums;
+using Rekrutacja.Helpers.PoleFiguryHelper;
+using Rekrutacja.Helpers.ProstyKalkulatorStaticHelper;
+using Rekrutacja.Workers.Template;
+using Rekrutacja.Workers.Zadanie2;
+using Soneta.Business;
+using Soneta.Kadry;
+using Soneta.KadryPlace;
+using Soneta.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Soneta.Kadry;
-using Soneta.KadryPlace;
-using Soneta.Types;
-using Rekrutacja.Workers.Template;
-using Rekrutacja.Helpers.ProstyKalkulatorStaticHelper;
 
 /// Należy utworzyć kalkulator który posiada cztery operacje (+,-,*,/), wynik zostanie zapisany
 /// na WSZYSTKICH ZAZNACZONYCH OBIEKTACH PRACOWNIK w polu Cecha "Wynik" oraz po wykonaniu działania
@@ -18,13 +21,13 @@ using Rekrutacja.Helpers.ProstyKalkulatorStaticHelper;
 
 
 //Rejetracja Workera - Pierwszy TypeOf określa jakiego typu ma być wyświetlany Worker, Drugi parametr wskazuje na jakim Typie obiektów będzie wyświetlany Worker
-[assembly: Worker(typeof(TemplateWorker), typeof(Pracownicy))]
-namespace Rekrutacja.Workers.Template
+[assembly: Worker(typeof(Zadanie2Worker), typeof(Pracownicy))]
+namespace Rekrutacja.Workers.Zadanie2
 {
-    public class TemplateWorker
+    public class Zadanie2Worker
     {
         //Aby parametry działały prawidłowo dziedziczymy po klasie ContextBase
-        public class TemplateWorkerParametry : ContextBase
+        public class Zadanie2WorkerParametry : ContextBase
         {
             [Caption("Data obliczeń")]
             public Date DataObliczen { get; set; }
@@ -32,9 +35,9 @@ namespace Rekrutacja.Workers.Template
             public int A { get; set; }
             [Caption("B")]
             public int B { get; set; }
-            [Caption("Operacja")]
-            public char Operacja { get; set; }
-            public TemplateWorkerParametry(Context context) : base(context)
+            [Caption("Figura")]
+            public FiguraEnum Figura { get; set; }
+            public Zadanie2WorkerParametry(Context context) : base(context)
             {
                 this.DataObliczen = Date.Today;
             }
@@ -45,10 +48,10 @@ namespace Rekrutacja.Workers.Template
         public Context Cx { get; set; }
         //Pobieramy z Contextu parametry, jeżeli nie ma w Context Parametrów mechanizm sam utworzy nowy obiekt oraz wyświetli jego formatkę
         [Context]
-        public TemplateWorkerParametry Parametry { get; set; }
+        public Zadanie2WorkerParametry Parametry { get; set; }
         //Atrybut Action - Wywołuje nam metodę która znajduje się poniżej
-        [Action("Kalkulator",
-           Description = "Prosty kalkulator ",
+        [Action("Pole figury",
+           Description = "Kalkulator obliczający pola figur geometrycznych",
            Priority = 10,
            Mode = ActionMode.ReadOnlySession,
            Icon = ActionIcon.Accept,
@@ -69,20 +72,14 @@ namespace Rekrutacja.Workers.Template
             //Aby modyfikować dane musimy mieć otwartą sesję, któa nie jest read only
             using (Session nowaSesja = this.Cx.Login.CreateSession(false, false, "ModyfikacjaPracownika"))
             {
-                try // Zrobię to w bloku try catch, gdyż sama metoda ProstyKalkulatorStaticHelper.WykonajOperacje może rzucić wyjątek, np. w przypadku
-                    // dzielenia przez zero, a chciałbym uniknąć problemów z UI aplikacji Evova 365 lub problemów z samą bazą danych
-                    // przy tak na prawdę pojedynczej prostej operacji
-                    // Oczywiście gdyby było tutaj więcej danych do przetworzenia (a co za tym idzie również do potencjalnego stracenia w przypaku
-                    // wyjątku) to należałoby dodać tutaj więcej logiki, podzielić to na mniejsze operacje - jednak w tym konkretnym Workerze
-                    // nie widzę takiej dużej konieczności, jednak można to rozbudować
+                try // Zrobię to w bloku try catch, gdyby PoleFiguryHelper.ObliczPoleFigury wyrzuciła wyjątek
                 {
                     //Otwieramy Transaction aby można było edytować obiekt z sesji
                     using (ITransaction trans = nowaSesja.Logout(true))
                     {
-
-                        // Zmienna wynikOperacji będzie przechowywać wynik, a ponieważ wszyscy zaznaczeni pracownicy będą mieli aktualizowane pole na tą samą wartość
+                        // Zmienna wynik będzie przechowywać wynik, a ponieważ wszyscy zaznaczeni pracownicy będą mieli aktualizowane pole na tą samą wartość
                         // to lepiej obliczenia wykonać raz, a nie powtarzać te same obliczenia na tych samych danych dla każdego pracownika w pętli niżej
-                        int wynikOperacji = ProstyKalkulatorStaticHelper.WykonajOperacje(this.Parametry.A, this.Parametry.B, this.Parametry.Operacja);
+                        int wynik = PoleFiguryHelper.ObliczPoleFigury(this.Parametry.A, this.Parametry.B, this.Parametry.Figura);
 
                         //Pętla foreach, ponieważ może być zaznaczony więcej niż jeden pracownik - a co za tym idzie refleksja zwróci nam kolekcję obiektów typu Soneta.Kadry.Pracownik
                         foreach (var p in pracownik)
@@ -98,7 +95,7 @@ namespace Rekrutacja.Workers.Template
                             // to bardziej obawiam się problemów z przechwyceniem wyjątku w trakcie działania UI i otwartej transakcji, niż po prostu
                             // jej nie zatwierdzając (commitując)
 
-                            pracownikZSesja.Features["Wynik"] = (double)wynikOperacji;
+                            pracownikZSesja.Features["Wynik"] = (double)wynik;
 
                         }
 
@@ -112,7 +109,7 @@ namespace Rekrutacja.Workers.Template
                 catch (Exception ex)
                 {
                     throw new Exception($"{ex.Message}");
-                    //TODO: zapis do loga błędu, zgodnie z dobrymi praktykami nie powinniśmy wyświetlać exceptiona bezpośrednio użytkownikowi
+                    //TODO: zapis do loga błędu, zgodnie z dobrymi praktykami nie wyświetlamy exceptiona bezpośrednio użytkownikowi
                 }
 
             }

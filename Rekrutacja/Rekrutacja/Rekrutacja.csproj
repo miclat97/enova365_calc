@@ -19,4 +19,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Workers\Zadanie3\" />
+  </ItemGroup>
 </Project>
