@@ -1,3 +1,14 @@
+> [!NOTE]
+> Tak wygląda działanie pluginu w praktyce w systemie ERP Enova 365
+
+<picture>/Screenshots_Enova365/enova_1.png</picture>
+<picture>/Screenshots_Enova365/enova_2.png</picture>
+<picture>/Screenshots_Enova365/enova_3.png</picture>
+<picture>/Screenshots_Enova365/enova_4.png</picture>
+<picture>/Screenshots_Enova365/enova_5.png</picture>
+<picture>/Screenshots_Enova365/enova_6.png</picture>
+<picture>/Screenshots_Enova365/enova_7.png</picture>
+
 # Enova365 Calculator Plugin
 
 This repository contains a **custom plugin** for the **Enova365 ERP**
