@@ -51,8 +51,8 @@ namespace Rekrutacja.Workers.Zadanie3
         [Context]
         public Zadanie3WorkerParametry Parametry { get; set; }
         //Atrybut Action - Wywołuje nam metodę która znajduje się poniżej
-        [Action("Parser string na double",
-           Description = "Kalkulator pola figur geometrycznych i parser string na double",
+        [Action("Parser string na int",
+           Description = "Kalkulator pola figur geometrycznych i parser string na int",
            Priority = 10,
            Mode = ActionMode.ReadOnlySession,
            Icon = ActionIcon.Accept,
@@ -78,12 +78,12 @@ namespace Rekrutacja.Workers.Zadanie3
                     //Otwieramy Transaction aby można było edytować obiekt z sesji
                     using (ITransaction trans = nowaSesja.Logout(true))
                     {
-                        // Zmienna wynik będzie przechowywać wynik, a ponieważ wszyscy zaznaczeni pracownicy będą mieli aktualizowane pole na tą samą wartość
-                        // to lepiej obliczenia wykonać raz, a nie powtarzać te same obliczenia na tych samych danych dla każdego pracownika w pętli niżej
-
+                        // Parsujemy zmienne A i B z stringa na int, zgodnie z wymaganiami zadania napisałem parser ręcznie
                         int parsedA = StringToIntParserHelper.ParsePositiveNumberFromStringToInt(this.Parametry.A);
                         int parsedB = StringToIntParserHelper.ParsePositiveNumberFromStringToInt(this.Parametry.B);
 
+
+                        // Dzięki temu, że metody są wydzielone do osobnych klas statycznych, mogę teraz łatwo wykorzystać już zaimplementowaną metodę do poprzedniego zadania
                         int wynik = PoleFiguryHelper.ObliczPoleFigury(parsedA, parsedB, this.Parametry.Figura);
 
                         //Pętla foreach, ponieważ może być zaznaczony więcej niż jeden pracownik - a co za tym idzie refleksja zwróci nam kolekcję obiektów typu Soneta.Kadry.Pracownik
