@@ -1,7 +1,7 @@
 > [!NOTE]
 > Wyniki testów jednostkowych dla każdej z metod i każdego przypadku
 
-![screenshot](https://raw.githubusercontent.com/miclat97/enova365_calc/refs/heads/main/Screenshots_Enova365/testy_enova365.png)
+![screenshot](https://raw.githubusercontent.com/miclat97/enova365_calc/refs/heads/main/Screenshots_Enova365/24testy_enova365.png)
 
 > [!NOTE]
 > Tak wygląda działanie pluginu w praktyce w systemie ERP Enova 365
