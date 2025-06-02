@@ -58,11 +58,11 @@ namespace Rekrutacja.Workers.Template
             //Włączenie Debug, aby działał należy wygenerować DLL w trybie DEBUG
             DebuggerSession.MarkLineAsBreakPoint();
 
-            Pracownik pracownik = null;
+            Pracownik[] pracownik = null;
 
-            if (this.Cx.Contains(typeof(Pracownik)))
+            if (this.Cx.Contains(typeof(Pracownik[])))
             {
-                pracownik = (Pracownik)this.Cx[typeof(Pracownik)];
+                pracownik = (Pracownik[])this.Cx[typeof(Pracownik[])];
             }
 
             //Modyfikacja danych
@@ -79,19 +79,28 @@ namespace Rekrutacja.Workers.Template
                     //Otwieramy Transaction aby można było edytować obiekt z sesji
                     using (ITransaction trans = nowaSesja.Logout(true))
                     {
-                        //Pobieramy obiekt z sesji, aby móc go modyfikować
-                        var pracownikZSesja = nowaSesja.Get(pracownik);
 
+                        // Zmienna wynikOperacji będzie przechowywać wynik, a ponieważ wszyscy zaznaczeni pracownicy będą mieli aktualizowane pole na tą samą wartość
+                        // to lepiej obliczenia wykonać raz, a nie powtarzać te same obliczenia na tych samych danych dla każdego pracownika w pętli niżej
+                        int wynikOperacji = ProstyKalkulatorStaticHelper.WykonajOperacje(this.Parametry.A, this.Parametry.B, this.Parametry.Operacja);
 
-                        //Features - są to pola rozszerzające obiekty w bazie danych, dzięki czemu nie jestesmy ogarniczeni to kolumn jakie zostały utworzone przez producenta
+                        //Pętla foreach, ponieważ może być zaznaczony więcej niż jeden pracownik - a co za tym idzie refleksja zwróci nam kolekcję obiektów typu Soneta.Kadry.Pracownik
+                        foreach (var p in pracownik)
+                        {
+                            //Pobieramy obiekt z sesji, aby móc go modyfikować
+                            var pracownikZSesja = nowaSesja.Get(p);
 
-                        pracownikZSesja.Features["DataObliczen"] = this.Parametry.DataObliczen;
+                            //Features - są to pola rozszerzające obiekty w bazie danych, dzięki czemu nie jestesmy ogarniczeni to kolumn jakie zostały utworzone przez 
 
-                        // Zastanawiałem się czy blokiem try catch nie objąć tylko tej linii, ale jako że cały Worker robi tak na prawdę jedną operację matematyczną
-                        // to bardziej obawiam się problemów z przechwyceniem wyjątku w trakcie działania UI i otwartej transakcji, niż po prostu
-                        // jej nie zatwierdzając (commitując)
+                            pracownikZSesja.Features["DataObliczen"] = this.Parametry.DataObliczen;
 
-                        pracownikZSesja.Features["Wynik"] = ProstyKalkulatorStaticHelper.WykonajOperacje(this.Parametry.A, this.Parametry.B, this.Parametry.Operacja);
+                            // Zastanawiałem się czy blokiem try catch nie objąć tylko tej linii, ale jako że cały Worker robi tak na prawdę jedną operację matematyczną
+                            // to bardziej obawiam się problemów z przechwyceniem wyjątku w trakcie działania UI i otwartej transakcji, niż po prostu
+                            // jej nie zatwierdzając (commitując)
+
+                            pracownikZSesja.Features["Wynik"] = (double)wynikOperacji;
+
+                        }
 
                         //Zatwierdzamy zmiany wykonane w sesji
                         trans.CommitUI();
