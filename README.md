@@ -1,13 +1,14 @@
 > [!NOTE]
 > Tak wygląda działanie pluginu w praktyce w systemie ERP Enova 365
 
-<picture>/Screenshots_Enova365/enova_1.png</picture>
-<picture>/Screenshots_Enova365/enova_2.png</picture>
-<picture>/Screenshots_Enova365/enova_3.png</picture>
-<picture>/Screenshots_Enova365/enova_4.png</picture>
-<picture>/Screenshots_Enova365/enova_5.png</picture>
-<picture>/Screenshots_Enova365/enova_6.png</picture>
-<picture>/Screenshots_Enova365/enova_7.png</picture>
+![screenshot](https://raw.githubusercontent.com/miclat97/enova365_calc/refs/heads/main/Screenshots_Enova365/enova_1.png)
+![screenshot](https://raw.githubusercontent.com/miclat97/enova365_calc/refs/heads/main/Screenshots_Enova365/enova_2.png)
+![screenshot](https://raw.githubusercontent.com/miclat97/enova365_calc/refs/heads/main/Screenshots_Enova365/enova_3.png)
+![screenshot](https://raw.githubusercontent.com/miclat97/enova365_calc/refs/heads/main/Screenshots_Enova365/enova_4.png)
+![screenshot](https://raw.githubusercontent.com/miclat97/enova365_calc/refs/heads/main/Screenshots_Enova365/enova_5.png)
+![screenshot](https://raw.githubusercontent.com/miclat97/enova365_calc/refs/heads/main/Screenshots_Enova365/enova_6.png)
+![screenshot](https://raw.githubusercontent.com/miclat97/enova365_calc/refs/heads/main/Screenshots_Enova365/enova_7.png)
+
 
 # Enova365 Calculator Plugin
 
